@@ -2,6 +2,7 @@ package main
 
 import (
 	"Imp-go-topics/interfaceslearn"
+	routinesdir "Imp-go-topics/routinesDir"
 	"fmt"
 	"sync"
 )
@@ -62,5 +63,13 @@ func main() {
 	fmt.Println(msg)
 
 	//------------------------example of channel to channel communication-------------------------------------
+
+	pings := make(chan string, 1)
+
+	pongs := make(chan string, 1)
+
+	routinesdir.Ping(pings, "passed message")
+	routinesdir.Pong(pings, pongs)
+	fmt.Println(<-pongs)
 
 }
