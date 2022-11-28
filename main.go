@@ -35,17 +35,6 @@ func main() {
 	circle.Display()
 	//circle.Display2()
 
-	//print odd and even using two different goroutines
-
-	//syncChannel := make(chan bool)
-
-	wg := new(sync.WaitGroup)
-	wg.Add(2)
-
-	//routinesdir.DisplayOdd(syncChannel, wg)
-
-	//routinesdir.DisplayEven(syncChannel, wg)
-
 	//-------------------example of channels-------------------
 
 	messages := make(chan string)
@@ -71,5 +60,38 @@ func main() {
 	routinesdir.Ping(pings, "passed message")
 	routinesdir.Pong(pings, pongs)
 	fmt.Println(<-pongs)
+
+	//-----------------------------example of wait groups--------------------------------------------
+	// random goroutines are executing right now here.
+	var wg1 sync.WaitGroup
+
+	for i := 1; i <= 5; i++ {
+		wg1.Add(1)
+		go routinesdir.Worker(i, &wg1)
+	}
+	//block untill the waitgroup counter goes back to 0
+	//all the workers notified they're done.
+	wg1.Wait()
+
+	//-----------------------deposit and withdraw amount from account---------------------------
+
+	var wg2 sync.WaitGroup
+	wg2.Add(2)
+	go routinesdir.Withdraw(700, &wg2)
+	go routinesdir.Deposit(500, &wg2)
+	wg2.Wait()
+
+	fmt.Printf("New balnce %d\n", routinesdir.Balance)
+
+	//-----------print odd and even using two different goroutines---------------
+
+	//syncChannel := make(chan bool)
+
+	wg := new(sync.WaitGroup)
+	wg.Add(2)
+
+	//routinesdir.DisplayOdd(syncChannel, wg)
+
+	//routinesdir.DisplayEven(syncChannel, wg)
 
 }
