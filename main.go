@@ -1,7 +1,7 @@
 package main
 
 import (
-	"Imp-go-topics/datastructures"
+	"Imp-go-topics/interfaceslearn"
 	"fmt"
 	"sync"
 )
@@ -30,7 +30,7 @@ func main() {
 	fmt.Println("Value of x", GFG)
 
 	//interfaces and structures example
-	var circle datastructures.Contract1 = &datastructures.Shape{Radius: 3}
+	var circle interfaceslearn.Contract1 = &interfaceslearn.Shape{Radius: 3}
 	circle.Display()
 	//circle.Display2()
 
@@ -44,5 +44,23 @@ func main() {
 	//routinesdir.DisplayOdd(syncChannel, wg)
 
 	//routinesdir.DisplayEven(syncChannel, wg)
+
+	//-------------------example of channels-------------------
+
+	messages := make(chan string)
+
+	go func() {
+		messages <- "ping"
+	}()
+
+	go func() {
+		messages <- "pong"
+	}()
+
+	msg := <-messages
+
+	fmt.Println(msg)
+
+	//------------------------example of channel to channel communication-------------------------------------
 
 }
