@@ -87,11 +87,12 @@ func main() {
 
 	//syncChannel := make(chan bool)
 
-	wg := new(sync.WaitGroup)
-	wg.Add(2)
+	wg3 := new(sync.WaitGroup)
+	wg3.Add(2)
 
-	//routinesdir.DisplayOdd(syncChannel, wg)
+	go routinesdir.PrintOdd(wg3)
 
-	//routinesdir.DisplayEven(syncChannel, wg)
+	go routinesdir.PrintEven(wg3)
+	wg3.Wait()
 
 }
