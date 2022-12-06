@@ -1,9 +1,7 @@
 package main
 
 import (
-	"Imp-go-topics/interfaceslearn"
 	routinesdir "Imp-go-topics/routinesDir"
-	"fmt"
 	"sync"
 )
 
@@ -13,86 +11,106 @@ func main() {
 	//Modules or packages example
 	//slicesandarrays.DifferencebetweenArrayandSlice()
 
-	//goroutines example
-	var w sync.WaitGroup
+	//--------------goroutines example-------------------
+	// var w sync.WaitGroup
 
-	var m sync.Mutex
+	// var m sync.Mutex
 
-	for i := 0; i < 10; i++ {
-		w.Add(1)
-		go func(wg *sync.WaitGroup, mg *sync.Mutex) {
-			mg.Lock()
-			GFG = GFG + 1
-			mg.Unlock()
-			wg.Done()
-		}(&w, &m)
-	}
-	w.Wait()
-	fmt.Println("Value of x", GFG)
+	// for i := 0; i < 10; i++ {
+	// 	w.Add(1)
+	// 	go func(wg *sync.WaitGroup, mg *sync.Mutex) {
+	// 		mg.Lock()
+	// 		GFG = GFG + 1
+	// 		mg.Unlock()
+	// 		wg.Done()
+	// 	}(&w, &m)
+	// }
+	// w.Wait()
+	// fmt.Println("Value of x", GFG)
 
-	//interfaces and structures example
-	var circle interfaceslearn.Contract1 = &interfaceslearn.Shape{Radius: 3}
-	circle.Display()
+	//----------------------interfaces and structures example-----------------------------
+	// var circle interfaceslearn.Contract1 = &interfaceslearn.Shape{Radius: 3}
+	// circle.Display()
 	//circle.Display2()
 
 	//-------------------example of channels-------------------
 
-	messages := make(chan string)
+	// messages := make(chan string)
 
-	go func() {
-		messages <- "ping"
-	}()
+	// go func() {
+	// 	messages <- "ping"
+	// }()
 
-	go func() {
-		messages <- "pong"
-	}()
+	// go func() {
+	// 	messages <- "pong"
+	// }()
 
-	msg := <-messages
+	// msg := <-messages
 
-	fmt.Println(msg)
+	// fmt.Println(msg)
 
 	//------------------------example of channel to channel communication-------------------------------------
 
-	pings := make(chan string, 1)
+	// pings := make(chan string, 1)
 
-	pongs := make(chan string, 1)
+	// pongs := make(chan string, 1)
 
-	routinesdir.Ping(pings, "passed message")
-	routinesdir.Pong(pings, pongs)
-	fmt.Println(<-pongs)
+	// routinesdir.Ping(pings, "passed message")
+	// routinesdir.Pong(pings, pongs)
+	// fmt.Println(<-pongs)
 
 	//-----------------------------example of wait groups--------------------------------------------
 	// random goroutines are executing right now here.
-	var wg1 sync.WaitGroup
+	// var wg1 sync.WaitGroup
 
-	for i := 1; i <= 5; i++ {
-		wg1.Add(1)
-		go routinesdir.Worker(i, &wg1)
-	}
+	// for i := 1; i <= 5; i++ {
+	// 	wg1.Add(1)
+	// 	go routinesdir.Worker(i, &wg1)
+	// }
 	//block untill the waitgroup counter goes back to 0
 	//all the workers notified they're done.
-	wg1.Wait()
+	//wg1.Wait()
 
 	//-----------------------deposit and withdraw amount from account---------------------------
 
-	var wg2 sync.WaitGroup
-	wg2.Add(2)
-	go routinesdir.Withdraw(700, &wg2)
-	go routinesdir.Deposit(500, &wg2)
-	wg2.Wait()
+	// var wg2 sync.WaitGroup
+	// wg2.Add(2)
+	// go routinesdir.Withdraw(700, &wg2)
+	// go routinesdir.Deposit(500, &wg2)
+	// wg2.Wait()
 
-	fmt.Printf("New balnce %d\n", routinesdir.Balance)
+	// fmt.Printf("New balnce %d\n", routinesdir.Balance)
 
 	//-----------print odd and even using two different goroutines---------------
 
 	//syncChannel := make(chan bool)
-
-	wg3 := new(sync.WaitGroup)
+	var wg3 sync.WaitGroup
 	wg3.Add(2)
+	oddChan := make(chan int)
+	evenChan := make(chan int)
+	go routinesdir.PrintOdd(oddChan)
 
-	go routinesdir.PrintOdd(wg3)
+	go routinesdir.PrintEven(evenChan)
 
-	go routinesdir.PrintEven(wg3)
+	for i := 1; i <= 10; i++ {
+
+		if i%2 == 0 {
+			routinesdir.Mutex1.Lock()
+			evenChan <- i
+			<-evenChan
+			routinesdir.Mutex1.Unlock()
+		} else {
+			routinesdir.Mutex1.Lock()
+			oddChan <- i
+			<-oddChan
+			routinesdir.Mutex1.Unlock()
+		}
+	}
+
+	close(evenChan)
+	close(oddChan)
+	wg3.Done()
+	wg3.Done()
 	wg3.Wait()
 
 }
