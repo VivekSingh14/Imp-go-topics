@@ -2,7 +2,6 @@ package main
 
 import (
 	routinesdir "Imp-go-topics/routinesDir"
-	"fmt"
 	"sync"
 )
 
@@ -84,37 +83,53 @@ func main() {
 
 	//-----------print odd and even using two different goroutines---------------
 
-	//syncChannel := make(chan bool)
-	var wg3 sync.WaitGroup
-	m := sync.Mutex{}
-	wg3.Add(2)
-	oddch := make(chan int)
-	evench := make(chan int)
+	// var wg3 sync.WaitGroup
+	// m := sync.Mutex{}
+	// wg3.Add(2)
+	// oddch := make(chan int)
+	// evench := make(chan int)
 
-	go routinesdir.PrintOdd(oddch)
+	// go routinesdir.PrintOdd(oddch)
 
-	go routinesdir.PrintEven(evench)
+	// go routinesdir.PrintEven(evench)
 
-	for i := 1; i <= 10; i++ {
+	// for i := 1; i <= 10; i++ {
 
-		if i%2 == 0 {
-			m.Lock()
-			evench <- i
-			<-evench
-			m.Unlock()
-			fmt.Println("mutex unlocked from even")
-		} else {
-			m.Lock()
-			oddch <- i
-			<-oddch
-			m.Unlock()
-			fmt.Println("mutex unlocked from odd")
-		}
+	// 	if i%2 == 0 {
+	// 		m.Lock()
+	// 		evench <- i
+	// 		<-evench
+	// 		m.Unlock()
+	// 		fmt.Println("mutex unlocked from even")
+	// 	} else {
+	// 		m.Lock()
+	// 		oddch <- i
+	// 		<-oddch
+	// 		m.Unlock()
+	// 		fmt.Println("mutex unlocked from odd")
+	// 	}
+	// }
+
+	// wg3.Done()
+	// wg3.Done()
+	// close(oddch)
+	// close(evench)
+
+	//-----------------------url fetcher using wait group-------------------------
+
+	var wgurl sync.WaitGroup
+
+	urls := []string{
+		"http://httpbin.org/get?x=1",
+		"http://httpbin.org/get?y=2",
+		"http://httpbin.org/get?z=3",
 	}
 
-	wg3.Done()
-	wg3.Done()
-	close(oddch)
-	close(evench)
+	for _, u := range urls {
+		wgurl.Add(1)
+		go routinesdir.GetData(u, &wgurl)
+	}
+
+	wgurl.Wait()
 
 }
