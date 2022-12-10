@@ -2,21 +2,28 @@ package routinesdir
 
 import (
 	"fmt"
-	"sync"
 )
 
-var (
-	Mutex1 sync.Mutex
-)
-
-func PrintEven(ch <-chan int) {
-
-	fmt.Print("Even ", <-ch)
+func PrintEven(ch chan int) {
+	for {
+		select {
+		case eve := <-ch:
+			fmt.Println("Even ", eve)
+			fmt.Println("even goroutine is closed")
+			ch <- -1
+		}
+	}
 
 }
 
-func PrintOdd(ch <-chan int) {
-
-	fmt.Print("Odd ", <-ch)
+func PrintOdd(ch chan int) {
+	for {
+		select {
+		case od := <-ch:
+			fmt.Println("Odd ", od)
+			fmt.Println("odd goroutine is closed")
+			ch <- -1
+		}
+	}
 
 }

@@ -2,6 +2,7 @@ package main
 
 import (
 	routinesdir "Imp-go-topics/routinesDir"
+	"fmt"
 	"sync"
 )
 
@@ -85,32 +86,35 @@ func main() {
 
 	//syncChannel := make(chan bool)
 	var wg3 sync.WaitGroup
+	m := sync.Mutex{}
 	wg3.Add(2)
-	oddChan := make(chan int)
-	evenChan := make(chan int)
-	go routinesdir.PrintOdd(oddChan)
+	oddch := make(chan int)
+	evench := make(chan int)
 
-	go routinesdir.PrintEven(evenChan)
+	go routinesdir.PrintOdd(oddch)
+
+	go routinesdir.PrintEven(evench)
 
 	for i := 1; i <= 10; i++ {
 
 		if i%2 == 0 {
-			routinesdir.Mutex1.Lock()
-			evenChan <- i
-			<-evenChan
-			routinesdir.Mutex1.Unlock()
+			m.Lock()
+			evench <- i
+			<-evench
+			m.Unlock()
+			fmt.Println("mutex unlocked from even")
 		} else {
-			routinesdir.Mutex1.Lock()
-			oddChan <- i
-			<-oddChan
-			routinesdir.Mutex1.Unlock()
+			m.Lock()
+			oddch <- i
+			<-oddch
+			m.Unlock()
+			fmt.Println("mutex unlocked from odd")
 		}
 	}
 
-	close(evenChan)
-	close(oddChan)
 	wg3.Done()
 	wg3.Done()
-	wg3.Wait()
+	close(oddch)
+	close(evench)
 
 }
