@@ -1,10 +1,5 @@
 package main
 
-import (
-	routinesdir "Imp-go-topics/routinesDir"
-	"sync"
-)
-
 var GFG = 0
 
 func main() {
@@ -18,12 +13,12 @@ func main() {
 
 	// for i := 0; i < 10; i++ {
 	// 	w.Add(1)
-	// 	go func(wg *sync.WaitGroup, mg *sync.Mutex) {
+	// 	go func(wg *sync.WaitGroup, mg *sync.Mutex) { //we have defined the function with argument
 	// 		mg.Lock()
-	// 		GFG = GFG + 1
+	// 		GFG = GFG + 1 //this method definition
 	// 		mg.Unlock()
 	// 		wg.Done()
-	// 	}(&w, &m)
+	// 	}(&w, &m) //here we called the function and passed the argument
 	// }
 	// w.Wait()
 	// fmt.Println("Value of x", GFG)
@@ -31,7 +26,7 @@ func main() {
 	//----------------------interfaces and structures example-----------------------------
 	// var circle interfaceslearn.Contract1 = &interfaceslearn.Shape{Radius: 3}
 	// circle.Display()
-	//circle.Display2()
+	// //circle.Display2()
 
 	//-------------------example of channels-------------------
 
@@ -67,9 +62,9 @@ func main() {
 	// 	wg1.Add(1)
 	// 	go routinesdir.Worker(i, &wg1)
 	// }
-	//block untill the waitgroup counter goes back to 0
-	//all the workers notified they're done.
-	//wg1.Wait()
+	// //block untill the waitgroup counter goes back to 0
+	// //all the workers notified they're done.
+	// wg1.Wait()
 
 	//-----------------------deposit and withdraw amount from account---------------------------
 
@@ -83,9 +78,8 @@ func main() {
 
 	//-----------print odd and even using two different goroutines---------------
 
-	// var wg3 sync.WaitGroup
 	// m := sync.Mutex{}
-	// wg3.Add(2)
+
 	// oddch := make(chan int)
 	// evench := make(chan int)
 
@@ -100,36 +94,42 @@ func main() {
 	// 		evench <- i
 	// 		<-evench
 	// 		m.Unlock()
-	// 		fmt.Println("mutex unlocked from even")
+	// 		//fmt.Println("mutex unlocked from even")
 	// 	} else {
 	// 		m.Lock()
 	// 		oddch <- i
 	// 		<-oddch
 	// 		m.Unlock()
-	// 		fmt.Println("mutex unlocked from odd")
+	// 		//fmt.Println("mutex unlocked from odd")
 	// 	}
 	// }
 
-	// wg3.Done()
-	// wg3.Done()
 	// close(oddch)
 	// close(evench)
 
 	//-----------------------url fetcher using wait group-------------------------
 
-	var wgurl sync.WaitGroup
+	// var wgurl sync.WaitGroup
 
-	urls := []string{
-		"http://httpbin.org/get?x=1",
-		"http://httpbin.org/get?y=2",
-		"http://httpbin.org/get?z=3",
-	}
+	// urls := []string{
+	// 	"http://httpbin.org/get?x=1",
+	// 	"http://httpbin.org/get?y=2",
+	// 	"http://httpbin.org/get?z=3",
+	// }
 
-	for _, u := range urls {
-		wgurl.Add(1)
-		go routinesdir.GetData(u, &wgurl)
-	}
+	// for _, u := range urls {
+	// 	wgurl.Add(1)
+	// 	go routinesdir.GetData(u, &wgurl)
+	// }
 
-	wgurl.Wait()
+	// wgurl.Wait()
+	//----------------------------trying to pass one data to 2 channels same time--------------
+
+	// tings := make(chan string, 1)
+	// tings <- "my name is vivek"
+	// go routinesdir.Tong(tings)
+	// go routinesdir.Ting(tings)
+
+	// time.Sleep(2 * time.Second)
 
 }
