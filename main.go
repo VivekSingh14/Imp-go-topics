@@ -1,5 +1,11 @@
 package main
 
+import (
+	routinesdir "Imp-go-topics/routinesDir"
+	"fmt"
+	"time"
+)
+
 var GFG = 0
 
 func main() {
@@ -131,5 +137,24 @@ func main() {
 	// go routinesdir.Ting(tings)
 
 	// time.Sleep(2 * time.Second)
+
+	// ---------------------------buffered channels --------------------------------------
+	// ch := make(chan string, 2)
+	// ch <- "My name is anthony and i am being passed through the channel 1st time"
+	// ch <- "My name is anthony and i am being passed through the channel 2nd time"
+	// ch <- "My name is anthony and i am being passed through the channel 3rd time"
+	// fmt.Println(<-ch)
+	// fmt.Println(<-ch)
+
+	// --------------------------buffered channel int ------------------------------------
+
+	ch := make(chan int, 2)
+	go routinesdir.Write(ch)
+	time.Sleep(2 * time.Second)
+
+	for v := range ch {
+		fmt.Println("read value ", v, " from ch")
+		time.Sleep(2 * time.Second)
+	}
 
 }
