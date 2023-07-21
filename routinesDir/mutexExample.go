@@ -16,18 +16,20 @@ func init() {
 
 func Deposit(value int, wg *sync.WaitGroup) {
 	defer wg.Done()
-	// mutex.Lock()
-	fmt.Printf("Depositing %d to account with balance: %d\n", value, Balance)
+	//mutex.Lock()
+
 	Balance += value
-	// mutex.Unlock()
+	//mutex.Unlock()
+	fmt.Printf("Depositing %d to account with balance: %d\n", value, Balance)
 
 }
 
 func Withdraw(value int, wg *sync.WaitGroup) {
 	defer wg.Done()
-	// mutex.Lock()
-	fmt.Printf("Withdrwaing %d from account with balance: %d\n", value, Balance)
+	//mutex.Lock()
+
 	Balance -= value
-	// mutex.Unlock()
+	//mutex.Unlock()
+	fmt.Printf("Withdrwaing %d from account with balance: %d\n", value, Balance)
 
 }
