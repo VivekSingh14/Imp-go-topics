@@ -6,5 +6,5 @@ func Ping(pings chan<- string, msg string) {
 
 func Pong(pings <-chan string, pongs chan<- string) {
 	msg := <-pings
-	pongs <- msg
+	pongs <- msg + " :hacked"
 }
